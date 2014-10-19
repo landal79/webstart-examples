@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0+" codebase="$$codebase" href="$outputFile">
+ <information>
+    <title>Webstart Hello World Project</title>
+    <vendor>Landal</vendor>
+ </information>
+ <security>
+ <all-permissions/>
+ </security>
+ <resources>
+    <j2se version="1.7+" initial-heap-size="32m" max-heap-size="128m" />
+    <property name="jnlp.versionEnabled" value="false"/>
+    $dependencies
+ </resources>
+ <application-desc main-class="$mainClass">
+ </application-desc>
+</jnlp>

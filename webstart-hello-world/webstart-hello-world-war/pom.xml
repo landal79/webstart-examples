@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.landal.webstart</groupId>
+		<artifactId>webstart-hello-world</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>webstart-hello-world-war</artifactId>
+	<packaging>war</packaging>
+	<name>webstart-hello-world-war Maven Webapp</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.codehaus.mojo</groupId>
+			<artifactId>webstart-jnlp-servlet</artifactId>
+			<version>1.0-beta-6</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>webstart-hello-world-war</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>webstart-maven-plugin</artifactId>
+				<version>1.0-beta-6</version>
+				<executions>
+					<execution>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>jnlp-download-servlet</goal>
+						</goals>
+					</execution>
+				</executions>
+
+				<configuration>
+					<jnlpFiles>
+						<jnlpFile>
+							<templateFilename>template.vm</templateFilename>
+							<jarResources>
+								<jarResource>
+									<groupId>org.landal.webstart</groupId>
+									<artifactId>webstart-hello-world-jnlp</artifactId>
+									<version>0.0.1-SNAPSHOT</version>
+									<mainClass>org.landal.webstart.example.JNLPExample</mainClass>
+								</jarResource>
+							</jarResources>
+						</jnlpFile>
+					</jnlpFiles>
+					<sign>
+						<keystore>${project.build.directory}/keyStore</keystore>
+						<keypass>password</keypass>
+						<storepass>password</storepass>
+						<alias>webstart</alias>
+						<validity>365</validity>
+
+						<!-- the following key-settings are only used if the keystore and key
+							has to be generated at build-time -->
+						<dnameCn>Name</dnameCn>
+						<dnameOu>Organizational Unit</dnameOu>
+						<dnameO>Organization</dnameO>
+						<dnameL>City</dnameL>
+						<dnameSt>State</dnameSt>
+						<dnameC>IT</dnameC>
+
+						<!-- verify the signature after signing -->
+						<verify>true</verify>
+						<!-- KEYSTORE MANAGEMENT -->
+						<keystoreConfig>
+							<delete>true</delete>
+							<gen>true</gen>
+						</keystoreConfig>
+
+					</sign>
+
+					<gzip>true</gzip>
+
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jboss.as.plugins</groupId>
+				<artifactId>jboss-as-maven-plugin</artifactId>
+				<version>7.6.Final</version>
+				<executions>
+					<execution>
+						<id>deploy</id>
+						<phase>install</phase>
+						<goals>
+							<goal>deploy</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+	</build>
+</project>
