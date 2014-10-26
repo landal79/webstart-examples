@@ -3,7 +3,6 @@ package org.landal.webstart.example;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -25,6 +24,7 @@ public class HelloWorldPanel extends JPanel implements PaletteManager {
         setFont(new Font("Serif", Font.PLAIN, 24));
         add(createBody(), BorderLayout.CENTER);
         add(createFooter(), BorderLayout.SOUTH);
+        this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
     }
 
     private JPanel createBody() {
@@ -71,12 +71,6 @@ public class HelloWorldPanel extends JPanel implements PaletteManager {
         
         footerPanel.add(label);
         return footerPanel;
-    }
-
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawString("This is a painted string!", 10, 70);
     }
 
     // /////////////////////////////// PaletteManager
