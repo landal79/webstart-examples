@@ -4,78 +4,89 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class HelloWorldPanel extends JPanel {
+public class HelloWorldPanel extends JPanel implements PaletteManager {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private ColorPalette palette;
+    private ColorPalette palette;
 
-	public HelloWorldPanel() {
-		this.palette = ColorPalette.PRIMARY;
-		this.setLayout(new BorderLayout());
-		setPreferredSize(new Dimension(350, 200));
-		setBackground(palette.getBackground());
-		setFont(new Font("Serif", Font.PLAIN, 24));
-		addBody();
-		addFooter();
-	}
-
-	private void addBody() {
-		JPanel bodyPanel = new JPanel(new GridLayout(2, 1));
-		addLabel(bodyPanel);
-		addButton(bodyPanel);
-		add(bodyPanel, BorderLayout.CENTER);
-	}
-
-	@Override
-	public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawString("This is my custom Panel!",10,70);
+    public HelloWorldPanel() {
+        this.palette = ColorPalette.PRIMARY;
+        this.setLayout(new BorderLayout());
+        setPreferredSize(new Dimension(350, 200));
+        setBackground(palette.getBackground());
+        setFont(new Font("Serif", Font.PLAIN, 24));
+        add(createBody(), BorderLayout.CENTER);
+        add(createFooter(), BorderLayout.SOUTH);
     }
 
-	@Override
-	public Dimension getPreferredSize() {
-		return super.getPreferredSize();
-	}
+    private JPanel createBody() {
+        JPanel bodyPanel = new JPanel();
+        bodyPanel.setLayout(new BoxLayout(bodyPanel, BoxLayout.Y_AXIS));
+        
+        JPanel labelPanel = createLabelPanel();
+        bodyPanel.add(labelPanel);
+        bodyPanel.add(createButton(labelPanel));
+        return bodyPanel;
+    }
 
-	public void addLabel(JPanel bodyPanel) {
-		JLabel label = new JLabel("Hello World!");
-		label.setSize(200, 30);
-		label.setBorder(BorderFactory.createLineBorder(palette.getBorder(), 5));
-		label.setForeground(palette.getFont());
-		bodyPanel.add(label);
-	}
+    public JPanel createLabelPanel() {
+        JPanel panel = new JPanel();
+        // panel.setPreferredSize(new Dimension(100, 50));
+        panel.setBorder(BorderFactory.createLineBorder(palette.getBorder(), 5));
+        panel.setForeground(palette.getFont());
 
-	public void addButton(JPanel bodyPanel){
-		JButton btn = new JButton(new ChangePaletteAction(bodyPanel));
-		btn.setPreferredSize(new Dimension(10, 10));
-		btn.setText("Change _colors");
-		bodyPanel.add(btn);
-	}
+        JLabel label = new JLabel("Hello World!");
+        // label.setSize(100, 30);
+        panel.add(label);
 
-	public void addFooter() {
-		JLabel label = new JLabel("Copyright Landal");
-		label.setSize(200, 30);
-		label.setLocation(80, 50);
-		label.setBackground(palette.getMenu());
-		add(label, BorderLayout.PAGE_END);
-	}
+        return panel;
+    }
 
-	/////////////////////////////////
+    public JButton createButton(JPanel panel) {
+        JButton btn = new JButton(new ChangePaletteAction(panel, this));
+        // btn.setPreferredSize(new Dimension(10, 10));
+        btn.setText("Change color");
+        return btn;
+    }
+    
+    public JPanel createFooter() {
+        JPanel footerPanel = new JPanel();
+        footerPanel.setBackground(palette.getMenu());
 
-	public ColorPalette getPalette() {
-		return palette;
-	}
+        JLabel label = new JLabel("Copyright Landal") {
+            private static final long serialVersionUID = 1L;
+            {
+                setSize(200, 100);
+                setLocation(80, 50);
+            }
+        };
+        
+        footerPanel.add(label);
+        return footerPanel;
+    }
 
-	public void setPalette(ColorPalette palette) {
-		this.palette = palette;
-	}
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawString("This is a painted string!", 10, 70);
+    }
+
+    // /////////////////////////////// PaletteManager
+
+    public ColorPalette getPalette() {
+        return palette;
+    }
+
+    public void setPalette(ColorPalette palette) {
+        this.palette = palette;
+    }
 
 }
